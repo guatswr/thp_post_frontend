@@ -1,0 +1,28 @@
+name: thp-post-frontend
+services:
+  web:
+    image: thp-post-web:0.1.0
+    build: .
+    environment:
+      THP_DOMAIN: ${THP_DOMAIN:?Set THP_DOMAIN in thp_post_frontend/.env}
+      ACME_EMAIL: ${ACME_EMAIL:?Set ACME_EMAIL in thp_post_frontend/.env}
+      THP_BACKEND_UPSTREAM: ${THP_BACKEND_UPSTREAM:-http://thp-post-backend:8000}
+    ports:
+      - "${THP_HTTP_PORT:-80}:80"
+      - "${THP_HTTPS_PORT:-443}:443"
+      - "${THP_HTTPS_PORT:-443}:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [thp_post_net]
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+volumes:
+  caddy_data:
+  caddy_config:
+networks:
+  thp_post_net:
+    external: true
+    name: ${THP_DOCKER_NETWORK:-thp_post_net}

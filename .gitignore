@@ -1,0 +1,18 @@
+# Dependencies and production build
+node_modules/
+dist/
+.vite/
+
+# Local settings and credentials
+.env
+.env.*
+!.env.example
+
+# Test and tooling output
+test-results/
+playwright-report/
+coverage/
+artifacts/
+*.log
+npm-debug.log*
+.DS_Store

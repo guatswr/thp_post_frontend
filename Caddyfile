@@ -1,0 +1,27 @@
+{
+	email {$ACME_EMAIL}
+}
+{$THP_DOMAIN} {
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		X-Frame-Options DENY
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+	}
+	handle /api/* {
+		request_body {
+			max_size 16KB
+		}
+		# Do not compress API/SSE. Flush events immediately to the stage browser.
+		# Caddy sets X-Forwarded-For from its socket peer by default.
+		reverse_proxy {$THP_BACKEND_UPSTREAM} {
+			flush_interval -1
+		}
+	}
+	handle {
+		encode zstd gzip
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
