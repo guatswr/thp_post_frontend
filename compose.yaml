@@ -2,7 +2,10 @@ name: thp-post-frontend
 services:
   web:
     image: thp-post-web:0.1.0
-    build: .
+    build:
+      context: .
+      args:
+        DOCKER_REGISTRY: ${DOCKER_REGISTRY:-docker.io}
     environment:
       THP_DOMAIN: ${THP_DOMAIN:?Set THP_DOMAIN in thp_post_frontend/.env}
       ACME_EMAIL: ${ACME_EMAIL:?Set ACME_EMAIL in thp_post_frontend/.env}

@@ -6,6 +6,7 @@
 docker network inspect thp_post_net >/dev/null 2>&1 || docker network create thp_post_net
 cp .env.example .env
 # 设置真实的 THP_DOMAIN、ACME_EMAIL；THP_DOMAIN 与后端 .env 一致
+# 服务器无法访问 Docker Hub 时，在 .env 增加 DOCKER_REGISTRY=docker.1panel.live
 docker compose config --quiet
 docker compose build
 docker compose up -d
